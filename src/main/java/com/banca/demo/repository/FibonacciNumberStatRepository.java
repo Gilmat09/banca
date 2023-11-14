@@ -9,6 +9,6 @@ import java.util.List;
 
 @Repository
 public interface FibonacciNumberStatRepository extends JpaRepository<FibonacciNumberStat,Integer> {
-    @Query(value = "Select id,number,count(number) as occurrence from banca.fibonacci_number_stat group by number order by occurrence Desc limit :top", nativeQuery = true)
+    @Query(value = "Select id,number,count(number) as occurrence from BANCA.fibonacci_number_stat group by number order by occurrence Desc limit :top", nativeQuery = true)
     List<FibonacciNumberStat> getTopNumbers(Integer top);
 }
