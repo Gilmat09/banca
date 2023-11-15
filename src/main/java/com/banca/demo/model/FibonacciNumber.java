@@ -12,7 +12,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name="fibonacci_number", schema = "BANCA")
+@Table(name="fibonacci_number", schema = "banca")
 @AllArgsConstructor
 @NoArgsConstructor
 public class FibonacciNumber {

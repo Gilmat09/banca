@@ -6,7 +6,7 @@ import lombok.*;
 @Getter
 @Setter
 @Entity
-@Table(name="fibonacci_number_stat", schema = "BANCA")
+@Table(name="fibonacci_number_stat", schema = "banca")
 
 @AllArgsConstructor
 @NoArgsConstructor
