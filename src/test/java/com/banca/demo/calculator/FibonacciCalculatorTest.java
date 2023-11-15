@@ -1,30 +1,41 @@
 package com.banca.demo.calculator;
 
+import com.banca.demo.repository.FibonacciRepository;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.ArrayList;
+
+import static org.mockito.ArgumentMatchers.any;
 
 @ExtendWith(MockitoExtension.class)
 public class FibonacciCalculatorTest {
-    private FibonacciCalculator fibonacciCalculator;
 
-    @BeforeEach
-    public void setup() {
-        fibonacciCalculator = new FibonacciCalculator();
+    @Mock
+    private FibonacciRepository fibonacciRepository;
+    @InjectMocks
+    private FibonacciCalculatorCache fibonacciCalculator;
+
+
+    @Test
+    void testGetFibonacciNoSavedCache() {
+        Mockito.when(fibonacciRepository.findAll()).thenReturn(new ArrayList<>());
+        Mockito.when(fibonacciRepository.saveAll(any())).thenReturn(null);
+
+        Integer ret = fibonacciCalculator.getFibonacci(3);
+
+        Assertions.assertEquals(2, ret, "Fibonacci of 3 should be 2");
     }
 
     @Test
-    void testCalculateNumber() {
-        Integer ret = fibonacciCalculator.calculate(10);
-        Assertions.assertEquals(55, ret, "Expected result with fast algorithm should be 55");
-    }
+    void testGetFibonacciCache() {
+        Integer ret = fibonacciCalculator.getFibonacci(1);
 
-    @Test
-    void testGetSeries() {
-        var ret = fibonacciCalculator.getSeries(3);
-        Assertions.assertEquals(4, ret.keySet().stream().count(), "Expected 4 results");
-        Assertions.assertEquals(2, ret.get(3), "Expected result should be 2");
+        Assertions.assertEquals(1, ret, "Fibonacci of 1 should be 1");
     }
 }
