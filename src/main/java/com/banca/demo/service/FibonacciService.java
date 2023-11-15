@@ -33,6 +33,10 @@ public class FibonacciService {
     }
 
     public FibonacciNumberDTO getFiboNumber(Integer number) {
+        if (cache.isEmpty()) {
+            loadCache();
+        }
+
         FibonacciNumberDTO fiboNumber = new FibonacciNumberDTO();
         fiboNumber.setPos(number);
 
@@ -49,13 +53,16 @@ public class FibonacciService {
     private void loadNewSeries(Integer number) {
         Map<Integer, Integer> oldCache = new HashMap<>(cache);
         cache = calculator.getSeries(number);
-        if (oldCache.isEmpty()) {
-            saveSeries(cache);
-        } else {
-            Map<Integer, Integer> newCache = new HashMap<>(cache);
-            oldCache.keySet().forEach(newCache::remove);
-            saveSeries(newCache);
-        }
+        Map<Integer, Integer> newCache = new HashMap<>(cache);
+        oldCache.keySet().forEach(newCache::remove);
+        saveSeries(newCache);
+
+    }
+
+    private void loadCache() {
+        cache = fibonacciRepository.findAll()
+                .stream()
+                .collect(Collectors.toMap(FibonacciNumber::getPos, FibonacciNumber::getFibonacci));
     }
 
     private void saveSeries(Map<Integer, Integer> values) {
